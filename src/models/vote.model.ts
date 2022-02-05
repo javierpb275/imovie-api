@@ -23,4 +23,13 @@ const voteSchema = new mongoose.Schema<IVote>(
   }
 );
 
-export default mongoose.model<IVote>("Vote", voteSchema);
+voteSchema.methods.toJSON = function () {
+  const vote = this;
+  const voteObject = vote.toObject();
+  delete voteObject.__v;
+  return voteObject;
+};
+
+const Vote = mongoose.model<IVote>("Vote", voteSchema)
+
+export default Vote;

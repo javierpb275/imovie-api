@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import IReview, { Points } from "../interfaces/review.interface";
+import User from "./user.model";
+import Vote from "./vote.model";
 
 const reviewSchema = new mongoose.Schema<IReview>(
   {
@@ -10,8 +12,8 @@ const reviewSchema = new mongoose.Schema<IReview>(
     },
     points: {
       type: Number,
-      required: true,
       enum: Points,
+      default: 0,
     },
     movie: {
       type: mongoose.Schema.Types.ObjectId,
@@ -38,4 +40,20 @@ reviewSchema.virtual("votes", {
 reviewSchema.set("toObject", { virtuals: true });
 reviewSchema.set("toJSON", { virtuals: true });
 
-export default mongoose.model<IReview>("Review", reviewSchema);
+reviewSchema.methods.toJSON = function () {
+  const review = this;
+  const reviewObject = review.toObject();
+  delete reviewObject.__v;
+  return reviewObject;
+};
+
+reviewSchema.pre<IReview>("remove", async function (next) {
+  const review: IReview = this;
+  await Vote.deleteMany({ review: review._id });
+  await User.updateMany({ $pull: { favoriteReviews: { _id: review._id } } });
+  next();
+});
+
+const Review = mongoose.model<IReview>("Review", reviewSchema);
+
+export default Review;

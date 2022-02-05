@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import IUser, { Role } from "../interfaces/user.interface";
 import Review from "./review.model";
-import Vote from "./vote.model";
+import { hashPassword } from "../helpers/authentication.helper";
 
 const userSchema = new mongoose.Schema<IUser>(
   {
@@ -83,6 +83,7 @@ userSchema.set("toJSON", { virtuals: true });
 userSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
+  delete userObject.__v;
   delete userObject.password;
   delete userObject.role;
   return userObject;
@@ -91,9 +92,18 @@ userSchema.methods.toJSON = function () {
 userSchema.pre<IUser>("remove", async function (next) {
   const user: IUser = this;
   await Review.deleteMany({ user: user._id });
-  await Vote.deleteMany({ user: user._id });
   await User.updateMany({ $pull: { followers: { _id: user._id } } });
   await User.updateMany({ $pull: { followees: { _id: user._id } } });
+  next();
+});
+
+userSchema.pre<IUser>("save", async function (next) {
+  const user: IUser = this;
+  if (!user.isModified("password")) {
+    return next();
+  }
+  const hash: string = await hashPassword(user.password);
+  user.password = hash;
   next();
 });
 

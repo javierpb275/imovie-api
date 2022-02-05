@@ -54,10 +54,19 @@ movieSchema.virtual("reviews", {
 movieSchema.set("toObject", { virtuals: true });
 movieSchema.set("toJSON", { virtuals: true });
 
+movieSchema.methods.toJSON = function () {
+  const movie = this;
+  const movieObject = movie.toObject();
+  delete movieObject.__v;
+  return movieObject;
+};
+
 movieSchema.pre<IMovie>("remove", async function (next) {
   const movie: IMovie = this;
   await Review.deleteMany({ movie: movie._id });
   next();
 });
 
-export default mongoose.model<IMovie>("Movie", movieSchema);
+const Movie = mongoose.model<IMovie>("Movie", movieSchema);
+
+export default Movie;
