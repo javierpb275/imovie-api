@@ -3,8 +3,8 @@ export const validateObjectProperties = (
   allowedProperties: string[]
 ): boolean => {
   const objectProperties: string[] = Object.keys(someObject);
-  const isValidOperation: boolean = objectProperties.every((property) =>
+  const isValid: boolean = objectProperties.every((property) =>
     allowedProperties.includes(property)
   );
-  return isValidOperation;
+  return isValid;
 };
