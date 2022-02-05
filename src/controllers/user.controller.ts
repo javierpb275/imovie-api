@@ -203,6 +203,20 @@ class UserController {
       return res.status(500).send(err);
     }
   }
+
+  //FOLLOW:
+  public async follow(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      return res.status(200).send({ message: "started following pepe" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
 }
 
 const userController: UserController = new UserController();
