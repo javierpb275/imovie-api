@@ -19,6 +19,20 @@ class MovieController {
       return res.status(500).send(err);
     }
   }
+
+  //GET MOVIE
+  public async getMovie(req: Request, res: Response): Promise<Response> {
+    const { params } = req;
+    try {
+      const movie: IMovie | null = await Movie.findOne({ _id: params.id });
+      if (!movie) {
+        return res.status(404).send({ error: "Movie Not Found!" });
+      }
+      return res.status(200).send(movie);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
 }
 
 const moviesController: MovieController = new MovieController();
