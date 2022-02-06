@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { getMatch, getPaginationOptions } from "../helpers/pagination.helper";
+import { validateObjectProperties } from "../helpers/validation.helper";
 import IReview from "../interfaces/review.interface";
 import IUser from "../interfaces/user.interface";
 import Review from "../models/review.model";
@@ -55,6 +56,48 @@ class ReviewController {
         { path: "user", select: "_id username email" },
         { path: "movie", select: "_id title" },
       ]);
+      return res.status(200).send(review);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  //UPDATE REVIEW
+  public async updateReview(req: Request, res: Response): Promise<Response> {
+    const { userId, body, params } = req;
+    const isValid: boolean = validateObjectProperties(body, ["text", "points"]);
+    if (!isValid) {
+      return res.status(400).send({ error: "Invalid properties!" });
+    }
+    try {
+      const updatedReview: IReview | null = await Review.findOneAndUpdate(
+        { _id: params.id, user: userId },
+        body,
+        {
+          new: true,
+        }
+      );
+      if (!updatedReview) {
+        return res.status(404).send({ error: "Review Not Found!" });
+      }
+      return res.status(200).send(updatedReview);
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //DELETE REVIEW
+  public async deleteReview(req: Request, res: Response): Promise<Response> {
+    const { userId, params } = req;
+    try {
+      const review: IReview | null = await Review.findOne({
+        _id: params.id,
+        user: userId,
+      });
+      if (!review) {
+        return res.status(404).send({ error: "Review Not Found!" });
+      }
+      await review.remove();
       return res.status(200).send(review);
     } catch (err) {
       return res.status(500).send(err);
