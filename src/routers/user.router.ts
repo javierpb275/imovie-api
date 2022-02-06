@@ -13,5 +13,7 @@ router.patch("/me", auth, userController.updateProfile);
 router.delete("/me", auth, userController.deleteProfile);
 router.post("/startFollowing", auth, userController.startFollowing);
 router.post("/stopFollowing", auth, userController.stopFollowing);
+router.get("/followers", auth, userController.getFollowers);
+router.get("/followees", auth, userController.getFollowees);
 
 export default router;

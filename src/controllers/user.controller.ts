@@ -8,6 +8,7 @@ import IUser from "../interfaces/user.interface";
 import User from "../models/user.model";
 import config from "../config/config";
 import { validateObjectProperties } from "../helpers/validation.helper";
+import { getMatch, getPaginationOptions } from "../helpers/pagination.helper";
 
 let refreshTokens: string[] = [];
 
@@ -259,6 +260,48 @@ class UserController {
         .send({ message: "stopped following user successfully" });
     } catch (err) {
       return res.status(400).send(err);
+    }
+  }
+
+  //GET FOLLOWERS
+  public async getFollowers(req: Request, res: Response): Promise<Response> {
+    const { userId, query } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      const options = getPaginationOptions(query);
+      const match = getMatch(query);
+      await user.populate({
+        path: "followers",
+        match,
+        options,
+      });
+      return res.status(200).send(user.followers);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  //GET FOLLOWEES
+  public async getFollowees(req: Request, res: Response): Promise<Response> {
+    const { userId, query } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      const options = getPaginationOptions(query);
+      const match = getMatch(query);
+      await user.populate({
+        path: "followees",
+        match,
+        options,
+      });
+      return res.status(200).send(user.followees);
+    } catch (err) {
+      return res.status(500).send(err);
     }
   }
 }
