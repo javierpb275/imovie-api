@@ -11,5 +11,7 @@ router.post("/signout", auth, userController.signOut);
 router.get("/me", auth, userController.getProfile);
 router.patch("/me", auth, userController.updateProfile);
 router.delete("/me", auth, userController.deleteProfile);
+router.post("/startFollowing", auth, userController.startFollowing);
+router.post("/stopFollowing", auth, userController.stopFollowing);
 
 export default router;

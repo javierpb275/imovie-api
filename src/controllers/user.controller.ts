@@ -204,15 +204,59 @@ class UserController {
     }
   }
 
-  //FOLLOW:
-  public async follow(req: Request, res: Response): Promise<Response> {
+  //START FOLLOWING:
+  public async startFollowing(req: Request, res: Response): Promise<Response> {
     const { userId, body } = req;
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
-      return res.status(200).send({ message: "started following pepe" });
+      if (!body.followeeId) {
+        return res
+          .status(400)
+          .send({ error: "Please, provide id of user you want to follow!" });
+      }
+      await User.updateOne(
+        { _id: user._id },
+        { $push: { followees: body.followeeId } }
+      );
+      await User.updateOne(
+        { _id: body.followeeId },
+        { $push: { followers: user._id } }
+      );
+      return res
+        .status(200)
+        .send({ message: "started following user successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //STOP FOLLOWING:
+  public async stopFollowing(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.followeeId) {
+        return res.status(400).send({
+          error: "Please, provide id of user you do not want to follow!",
+        });
+      }
+      await User.updateOne(
+        { _id: user._id },
+        { $pull: { followees: body.followeeId } }
+      );
+      await User.updateOne(
+        { _id: body.followeeId },
+        { $pull: { followers: user._id } }
+      );
+      return res
+        .status(200)
+        .send({ message: "stopped following user successfully" });
     } catch (err) {
       return res.status(400).send(err);
     }
