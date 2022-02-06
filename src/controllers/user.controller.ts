@@ -304,6 +304,36 @@ class UserController {
       return res.status(500).send(err);
     }
   }
+
+  //GET USER
+  public async getUser(req: Request, res: Response): Promise<Response> {
+    const { params } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: params.id });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      return res.status(200).send(user);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  //GET USERS
+  public async getUsers(req: Request, res: Response): Promise<Response> {
+    const { query } = req;
+    const { limit, skip, sort } = getPaginationOptions(query);
+    const match = getMatch(query);
+    try {
+      const allUsers: IUser[] = await User.find(match)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
+      return res.status(200).send(allUsers);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
 }
 
 const userController: UserController = new UserController();

@@ -15,5 +15,7 @@ router.post("/startFollowing", auth, userController.startFollowing);
 router.post("/stopFollowing", auth, userController.stopFollowing);
 router.get("/followers", auth, userController.getFollowers);
 router.get("/followees", auth, userController.getFollowees);
+router.get("/", auth, userController.getUsers);
+router.get("/:id", auth, userController.getUser);
 
 export default router;
