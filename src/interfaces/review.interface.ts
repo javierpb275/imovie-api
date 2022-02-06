@@ -4,6 +4,7 @@ import IUser from "./user.interface";
 import IVote from "./vote.interface";
 
 export enum Points {
+  ZERO = 0,
   ONE = 1,
   TWO = 2,
   THREE = 3,
