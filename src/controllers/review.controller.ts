@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import { getMatch, getPaginationOptions } from "../helpers/pagination.helper";
 import { validateObjectProperties } from "../helpers/validation.helper";
+import IMovie from "../interfaces/movie.interface";
 import IReview from "../interfaces/review.interface";
 import IUser from "../interfaces/user.interface";
+import Movie from "../models/movie.model";
 import Review from "../models/review.model";
 import User from "../models/user.model";
 
@@ -99,6 +101,72 @@ class ReviewController {
       }
       await review.remove();
       return res.status(200).send(review);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  //GET MOVIE REVIEWS
+  public async getMovieReviews(req: Request, res: Response): Promise<Response> {
+    const { params, query } = req;
+    try {
+      const movie: IMovie | null = await Movie.findOne({ _id: params.movieId });
+      if (!movie) {
+        return res.status(404).send({ error: "Movie Not Found!" });
+      }
+      const options = getPaginationOptions(query);
+      const match = getMatch(query);
+      await movie.populate({
+        path: "reviews",
+        match,
+        options,
+      });
+      return res.status(200).send(movie.reviews);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  //GET PROFILE REVIEWS
+  public async getProfileReviews(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    const { userId, query } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      const options = getPaginationOptions(query);
+      const match = getMatch(query);
+      await user.populate({
+        path: "createdReviews",
+        match,
+        options,
+      });
+      return res.status(200).send(user.createdReviews);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
+
+  //GET USER REVIEWS
+  public async getUserReviews(req: Request, res: Response): Promise<Response> {
+    const { params, query } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: params.userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      const options = getPaginationOptions(query);
+      const match = getMatch(query);
+      await user.populate({
+        path: "createdReviews",
+        match,
+        options,
+      });
+      return res.status(200).send(user.createdReviews);
     } catch (err) {
       return res.status(500).send(err);
     }
