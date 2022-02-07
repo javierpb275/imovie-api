@@ -159,6 +159,7 @@ class UserController {
       "email",
       "password",
       "avatar",
+      "favoriteReviews",
     ]);
     if (!isValid) {
       return res.status(400).send({ error: "Invalid properties!" });

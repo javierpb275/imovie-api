@@ -103,6 +103,76 @@ class ReviewController {
       return res.status(500).send(err);
     }
   }
+
+  //ADD FAVORITES:
+  public async addFavorites(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.reviewId) {
+        return res
+          .status(400)
+          .send({ error: "Please, provide id of favorite review!" });
+      }
+      await User.updateOne(
+        { _id: user._id },
+        { $push: { favoriteReviews: body.reviewId } }
+      );
+      return res.status(200).send({ message: "added review successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //REMOVE FAVORITES:
+  public async removeFavorites(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.reviewId) {
+        return res
+          .status(400)
+          .send({ error: "Please, provide id of review you want to remove!" });
+      }
+      await User.updateOne(
+        { _id: user._id },
+        { $pull: { favoriteReviews: body.reviewId } }
+      );
+      return res.status(200).send({ message: "removed review successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //GET FAVORITE REVIEWS
+  public async getFavoriteReviews(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    const { userId, query } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      const options = getPaginationOptions(query);
+      const match = getMatch(query);
+      await user.populate({
+        path: "favoriteReviews",
+        match,
+        options,
+      });
+      return res.status(200).send(user.favoriteReviews);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
+  }
 }
 
 const reviewController: ReviewController = new ReviewController();

@@ -9,5 +9,8 @@ router.get("/:id", auth, reviewController.getReview);
 router.post("/", auth, reviewController.createReview);
 router.patch("/:id", auth, reviewController.updateReview);
 router.delete("/:id", auth, reviewController.deleteReview);
+router.post("/addFavorites", auth, reviewController.addFavorites);
+router.post("/removeFavorites", auth, reviewController.removeFavorites);
+router.get("/me/favoriteReviews", auth, reviewController.getFavoriteReviews);
 
 export default router;
