@@ -5,6 +5,7 @@ import helmet from "helmet";
 import userRouter from "./routers/user.router";
 import movieRouter from "./routers/movie.router";
 import reviewRouter from "./routers/review.router";
+import voteRouter from "./routers/vote.router";
 
 const app: Application = express();
 
@@ -21,5 +22,6 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/reviews", reviewRouter);
+app.use("/api/votes", voteRouter);
 
 export default app;
