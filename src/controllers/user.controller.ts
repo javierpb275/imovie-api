@@ -267,13 +267,13 @@ class UserController {
   //GET FOLLOWERS
   public async getFollowers(req: Request, res: Response): Promise<Response> {
     const { userId, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await user.populate({
         path: "followers",
         match,
@@ -288,13 +288,13 @@ class UserController {
   //GET FOLLOWEES
   public async getFollowees(req: Request, res: Response): Promise<Response> {
     const { userId, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await user.populate({
         path: "followees",
         match,

@@ -109,13 +109,13 @@ class ReviewController {
   //GET MOVIE REVIEWS
   public async getMovieReviews(req: Request, res: Response): Promise<Response> {
     const { params, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const movie: IMovie | null = await Movie.findOne({ _id: params.movieId });
       if (!movie) {
         return res.status(404).send({ error: "Movie Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await movie.populate({
         path: "reviews",
         match,
@@ -133,13 +133,13 @@ class ReviewController {
     res: Response
   ): Promise<Response> {
     const { userId, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await user.populate({
         path: "createdReviews",
         match,
@@ -154,13 +154,13 @@ class ReviewController {
   //GET USER REVIEWS
   public async getUserReviews(req: Request, res: Response): Promise<Response> {
     const { params, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const user: IUser | null = await User.findOne({ _id: params.userId });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await user.populate({
         path: "createdReviews",
         match,
@@ -224,13 +224,13 @@ class ReviewController {
     res: Response
   ): Promise<Response> {
     const { userId, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await user.populate({
         path: "favoriteReviews",
         match,

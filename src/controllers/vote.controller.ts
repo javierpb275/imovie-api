@@ -28,6 +28,8 @@ class VoteController {
   //GET REVIEW VOTES
   public async getReviewVotes(req: Request, res: Response): Promise<Response> {
     const { params, query } = req;
+    const options = getPaginationOptions(query);
+    const match = getMatch(query);
     try {
       const review: IReview | null = await Review.findOne({
         _id: params.reviewId,
@@ -35,8 +37,6 @@ class VoteController {
       if (!review) {
         return res.status(404).send({ error: "Review Not Found!" });
       }
-      const options = getPaginationOptions(query);
-      const match = getMatch(query);
       await review.populate({
         path: "votes",
         select: "like",
