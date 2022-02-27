@@ -21,6 +21,8 @@ interface IReview extends mongoose.Document {
   text: string;
   points: Points;
   votes: IVote[];
+  likes: IUser[];
+  dislikes: IUser[];
   movie: IMovie;
   user: IUser;
 }

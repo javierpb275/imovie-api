@@ -172,6 +172,98 @@ class ReviewController {
     }
   }
 
+  //ADD LIKE:
+  public async addLike(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.reviewId) {
+        return res.status(400).send({ error: "Please, provide review id!" });
+      }
+      await Review.updateOne(
+        { _id: body.reviewId },
+        { $pull: { likes: user._id, dislikes: user._id } }
+      );
+      await Review.updateOne(
+        { _id: body.reviewId },
+        { $push: { likes: user._id } }
+      );
+      return res.status(200).send({ message: "added like successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //REMOVE LIKE:
+  public async removeLike(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.reviewId) {
+        return res.status(400).send({ error: "Please, provide review id!" });
+      }
+      await Review.updateOne(
+        { _id: body.reviewId },
+        { $pull: { likes: user._id } }
+      );
+      return res.status(200).send({ message: "removed like successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //ADD DISLIKE:
+  public async addDislike(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.reviewId) {
+        return res.status(400).send({ error: "Please, provide review id!" });
+      }
+      await Review.updateOne(
+        { _id: body.reviewId },
+        { $pull: { likes: user._id, dislikes: user._id } }
+      );
+      await Review.updateOne(
+        { _id: body.reviewId },
+        { $push: { dislikes: user._id } }
+      );
+      return res.status(200).send({ message: "added dislike successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
+  //REMOVE DISLIKE:
+  public async removeDislike(req: Request, res: Response): Promise<Response> {
+    const { userId, body } = req;
+    try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
+      if (!body.reviewId) {
+        return res.status(400).send({ error: "Please, provide review id!" });
+      }
+      await Review.updateOne(
+        { _id: body.reviewId },
+        { $pull: { dislikes: user._id } }
+      );
+      return res.status(200).send({ message: "removed dislike successfully" });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
+  }
+
   //ADD FAVORITES:
   public async addFavorites(req: Request, res: Response): Promise<Response> {
     const { userId, body } = req;

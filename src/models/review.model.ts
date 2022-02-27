@@ -25,6 +25,8 @@ const reviewSchema = new mongoose.Schema<IReview>(
       ref: "User",
       required: true,
     },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,
