@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import IMovie from "./movie.interface";
 import IUser from "./user.interface";
-import IVote from "./vote.interface";
 
 export enum Points {
   ZERO = 0,
@@ -20,7 +19,6 @@ export enum Points {
 interface IReview extends mongoose.Document {
   text: string;
   points: Points;
-  votes: IVote[];
   likes: IUser[];
   dislikes: IUser[];
   movie: IMovie;

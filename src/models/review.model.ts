@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import IReview, { Points } from "../interfaces/review.interface";
 import User from "./user.model";
-import Vote from "./vote.model";
 
 const reviewSchema = new mongoose.Schema<IReview>(
   {
@@ -25,22 +24,23 @@ const reviewSchema = new mongoose.Schema<IReview>(
       ref: "User",
       required: true,
     },
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    dislikes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
-
-reviewSchema.virtual("votes", {
-  ref: "Vote",
-  localField: "_id",
-  foreignField: "review",
-});
-
-reviewSchema.set("toObject", { virtuals: true });
-reviewSchema.set("toJSON", { virtuals: true });
 
 reviewSchema.methods.toJSON = function () {
   const review = this;
@@ -51,7 +51,6 @@ reviewSchema.methods.toJSON = function () {
 
 reviewSchema.pre<IReview>("remove", async function (next) {
   const review: IReview = this;
-  await Vote.deleteMany({ review: review._id });
   await User.updateMany({ $pull: { favoriteReviews: { _id: review._id } } });
   next();
 });

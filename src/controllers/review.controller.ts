@@ -72,8 +72,12 @@ class ReviewController {
       return res.status(400).send({ error: "Invalid properties!" });
     }
     try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
       const updatedReview: IReview | null = await Review.findOneAndUpdate(
-        { _id: params.id, user: userId },
+        { _id: params.id, user: user._id },
         body,
         {
           new: true,
@@ -92,9 +96,13 @@ class ReviewController {
   public async deleteReview(req: Request, res: Response): Promise<Response> {
     const { userId, params } = req;
     try {
+      const user: IUser | null = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User Not Found!" });
+      }
       const review: IReview | null = await Review.findOne({
         _id: params.id,
-        user: userId,
+        user: user._id,
       });
       if (!review) {
         return res.status(404).send({ error: "Review Not Found!" });
@@ -273,9 +281,7 @@ class ReviewController {
         return res.status(404).send({ error: "User Not Found!" });
       }
       if (!body.reviewId) {
-        return res
-          .status(400)
-          .send({ error: "Please, provide id of favorite review!" });
+        return res.status(400).send({ error: "Please, provide review id!" });
       }
       await User.updateOne(
         { _id: user._id },
@@ -296,9 +302,7 @@ class ReviewController {
         return res.status(404).send({ error: "User Not Found!" });
       }
       if (!body.reviewId) {
-        return res
-          .status(400)
-          .send({ error: "Please, provide id of review you want to remove!" });
+        return res.status(400).send({ error: "Please, provide review id!" });
       }
       await User.updateOne(
         { _id: user._id },

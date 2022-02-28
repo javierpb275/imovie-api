@@ -173,7 +173,7 @@ class UserController {
         const hash: string = await hashPassword(body.password);
         body.password = hash;
       }
-      const updatedUser = await User.findOneAndUpdate({ _id: userId }, body, {
+      const updatedUser = await User.findOneAndUpdate({ _id: user._id }, body, {
         new: true,
       });
       return res.status(200).send(updatedUser);
@@ -215,9 +215,7 @@ class UserController {
         return res.status(404).send({ error: "User Not Found!" });
       }
       if (!body.followeeId) {
-        return res
-          .status(400)
-          .send({ error: "Please, provide id of user you want to follow!" });
+        return res.status(400).send({ error: "Please, provide user id!" });
       }
       await User.updateOne(
         { _id: user._id },
@@ -245,7 +243,7 @@ class UserController {
       }
       if (!body.followeeId) {
         return res.status(400).send({
-          error: "Please, provide id of user you do not want to follow!",
+          error: "Please, provide user id!",
         });
       }
       await User.updateOne(

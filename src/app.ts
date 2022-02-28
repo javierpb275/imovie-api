@@ -1,13 +1,10 @@
+import express, { Application } from "express";
 import compression from "compression";
 import cors from "cors";
-import express, { Application } from "express";
 import helmet from "helmet";
 import userRouter from "./routers/user.router";
 import movieRouter from "./routers/movie.router";
 import reviewRouter from "./routers/review.router";
-import voteRouter from "./routers/vote.router";
-import likeRouter from "./routers/like.router";
-import dislikeRouter from "./routers/dislike.router";
 
 const app: Application = express();
 
@@ -24,8 +21,5 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/reviews", reviewRouter);
-app.use("/api/votes", voteRouter);
-app.use("/api/likes", likeRouter);
-app.use("/api/dislikes", dislikeRouter);
 
 export default app;
