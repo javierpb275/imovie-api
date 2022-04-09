@@ -18,7 +18,7 @@ class MovieController {
         .limit(limit);
       return res.status(200).send(allMovies);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -32,7 +32,7 @@ class MovieController {
       }
       return res.status(200).send(movie);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -51,7 +51,7 @@ class MovieController {
       await newMovie.save();
       return res.status(201).send(newMovie);
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -78,7 +78,7 @@ class MovieController {
       }
       return res.status(200).send(updatedMovie);
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -102,7 +102,7 @@ class MovieController {
       await movie.remove();
       return res.status(200).send(movie);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 }

@@ -21,7 +21,7 @@ class ReviewController {
       await newReview.save();
       return res.status(201).send(newReview);
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -42,7 +42,7 @@ class ReviewController {
         ]);
       return res.status(200).send(allReviews);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -60,7 +60,7 @@ class ReviewController {
       ]);
       return res.status(200).send(review);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -88,7 +88,7 @@ class ReviewController {
       }
       return res.status(200).send(updatedReview);
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -110,7 +110,7 @@ class ReviewController {
       await review.remove();
       return res.status(200).send(review);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -131,7 +131,7 @@ class ReviewController {
       });
       return res.status(200).send(movie.reviews);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -155,7 +155,7 @@ class ReviewController {
       });
       return res.status(200).send(user.createdReviews);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -176,7 +176,7 @@ class ReviewController {
       });
       return res.status(200).send(user.createdReviews);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -199,9 +199,9 @@ class ReviewController {
         { _id: body.reviewId },
         { $push: { likes: user._id } }
       );
-      return res.status(200).send({ message: "added like successfully" });
+      return res.status(200).send({ message: "Added like successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -220,9 +220,9 @@ class ReviewController {
         { _id: body.reviewId },
         { $pull: { likes: user._id } }
       );
-      return res.status(200).send({ message: "removed like successfully" });
+      return res.status(200).send({ message: "Removed like successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -245,9 +245,9 @@ class ReviewController {
         { _id: body.reviewId },
         { $push: { dislikes: user._id } }
       );
-      return res.status(200).send({ message: "added dislike successfully" });
+      return res.status(200).send({ message: "Added dislike successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -266,9 +266,9 @@ class ReviewController {
         { _id: body.reviewId },
         { $pull: { dislikes: user._id } }
       );
-      return res.status(200).send({ message: "removed dislike successfully" });
+      return res.status(200).send({ message: "Removed dislike successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -287,9 +287,9 @@ class ReviewController {
         { _id: user._id },
         { $push: { favoriteReviews: body.reviewId } }
       );
-      return res.status(200).send({ message: "added review successfully" });
+      return res.status(200).send({ message: "Added review successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -308,9 +308,9 @@ class ReviewController {
         { _id: user._id },
         { $pull: { favoriteReviews: body.reviewId } }
       );
-      return res.status(200).send({ message: "removed review successfully" });
+      return res.status(200).send({ message: "Removed review successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -334,7 +334,7 @@ class ReviewController {
       });
       return res.status(200).send(user.favoriteReviews);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 }

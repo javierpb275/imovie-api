@@ -41,7 +41,7 @@ class UserController {
         refreshToken,
       });
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -73,7 +73,7 @@ class UserController {
         refreshToken,
       });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -131,7 +131,7 @@ class UserController {
       refreshTokens = refreshTokens.filter(
         (reToken) => reToken != req.body.token
       );
-      return res.status(200).send({ message: "signed out successfully" });
+      return res.status(200).send({ message: "Signed out successfully" });
     } catch (err) {
       return res.status(500).send({ error: "Unable to sign out" });
     }
@@ -147,7 +147,7 @@ class UserController {
       }
       return res.status(200).send(user);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -178,7 +178,7 @@ class UserController {
       });
       return res.status(200).send(updatedUser);
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -202,7 +202,7 @@ class UserController {
       );
       return res.status(200).send(user);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -227,9 +227,9 @@ class UserController {
       );
       return res
         .status(200)
-        .send({ message: "started following user successfully" });
+        .send({ message: "Started following user successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -256,9 +256,9 @@ class UserController {
       );
       return res
         .status(200)
-        .send({ message: "stopped following user successfully" });
+        .send({ message: "Stopped following user successfully" });
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(400).send({error: err});
     }
   }
 
@@ -279,7 +279,7 @@ class UserController {
       });
       return res.status(200).send(user.followers);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -300,7 +300,7 @@ class UserController {
       });
       return res.status(200).send(user.followees);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -314,7 +314,7 @@ class UserController {
       }
       return res.status(200).send(user);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 
@@ -330,7 +330,7 @@ class UserController {
         .limit(limit);
       return res.status(200).send(allUsers);
     } catch (err) {
-      return res.status(500).send(err);
+      return res.status(500).send({error: err});
     }
   }
 }

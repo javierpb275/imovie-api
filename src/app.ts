@@ -9,7 +9,7 @@ import reviewRouter from "./routers/review.router";
 const app: Application = express();
 
 //settings
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3001);
 
 //middlewares
 app.use(helmet());
