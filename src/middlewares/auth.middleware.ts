@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/config";
 import { Request, Response, NextFunction } from "express";
 
-interface IPayload {
+export interface IPayload {
   id: string;
   iat: number;
   exp: number;

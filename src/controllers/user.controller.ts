@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import {
   generateToken,
   comparePassword,
@@ -9,6 +10,7 @@ import User from "../models/user.model";
 import config from "../config/config";
 import { validateObjectProperties } from "../helpers/validation.helper";
 import { getMatch, getPaginationOptions } from "../helpers/pagination.helper";
+import { IPayload } from "../middlewares/auth.middleware";
 
 let refreshTokens: string[] = [];
 
@@ -25,13 +27,16 @@ class UserController {
       refreshTokens = refreshTokens.filter(
         (reToken) => reToken != req.body.token
       );
+
+      const payload = jwt.decode(req.body.token) as IPayload;
+
       const accessToken: string = generateToken(
-        req.body.userId,
+        payload.id,
         config.AUTH.ACCESS_TOKEN_SECRET,
         "15m"
       );
       const refreshToken: string = generateToken(
-        req.body.userId,
+        payload.id,
         config.AUTH.REFRESH_TOKEN_SECRET,
         "20m"
       );
@@ -41,7 +46,7 @@ class UserController {
         refreshToken,
       });
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -73,7 +78,7 @@ class UserController {
         refreshToken,
       });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -147,7 +152,7 @@ class UserController {
       }
       return res.status(200).send(user);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -178,7 +183,7 @@ class UserController {
       });
       return res.status(200).send(updatedUser);
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -202,7 +207,7 @@ class UserController {
       );
       return res.status(200).send(user);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -229,7 +234,7 @@ class UserController {
         .status(200)
         .send({ message: "Started following user successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -258,7 +263,7 @@ class UserController {
         .status(200)
         .send({ message: "Stopped following user successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -279,7 +284,7 @@ class UserController {
       });
       return res.status(200).send(user.followers);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -300,7 +305,7 @@ class UserController {
       });
       return res.status(200).send(user.followees);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -314,7 +319,7 @@ class UserController {
       }
       return res.status(200).send(user);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -330,7 +335,7 @@ class UserController {
         .limit(limit);
       return res.status(200).send(allUsers);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 }
