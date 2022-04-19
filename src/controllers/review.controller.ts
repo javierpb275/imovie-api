@@ -128,6 +128,10 @@ class ReviewController {
         path: "reviews",
         match,
         options,
+        populate: [
+          { path: "user", select: "_id username email avatar", match, options },
+          { path: "movie", select: "_id title", match, options },
+        ]
       });
       return res.status(200).send(movie.reviews);
     } catch (err) {
@@ -152,6 +156,10 @@ class ReviewController {
         path: "createdReviews",
         match,
         options,
+        populate: [
+          { path: "user", select: "_id username email avatar", match, options },
+          { path: "movie", select: "_id title", match, options },
+        ]
       });
       return res.status(200).send(user.createdReviews);
     } catch (err) {
@@ -173,6 +181,10 @@ class ReviewController {
         path: "createdReviews",
         match,
         options,
+        populate: [
+          { path: "user", select: "_id username email avatar", match, options },
+          { path: "movie", select: "_id title", match, options },
+        ]
       });
       return res.status(200).send(user.createdReviews);
     } catch (err) {
@@ -331,6 +343,10 @@ class ReviewController {
         path: "favoriteReviews",
         match,
         options,
+        populate: [
+          { path: "user", select: "_id username email avatar", match, options },
+          { path: "movie", select: "_id title", match, options },
+        ]
       });
       return res.status(200).send(user.favoriteReviews);
     } catch (err) {
