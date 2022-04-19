@@ -37,7 +37,7 @@ class ReviewController {
         .skip(skip)
         .limit(limit)
         .populate([
-          { path: "user", select: "_id username email", match, options },
+          { path: "user", select: "_id username email avatar", match, options },
           { path: "movie", select: "_id title", match, options },
         ]);
       return res.status(200).send(allReviews);
@@ -55,7 +55,7 @@ class ReviewController {
         return res.status(404).send({ error: "Review Not Found!" });
       }
       await review.populate([
-        { path: "user", select: "_id username email" },
+        { path: "user", select: "_id username email avatar" },
         { path: "movie", select: "_id title" },
       ]);
       return res.status(200).send(review);
