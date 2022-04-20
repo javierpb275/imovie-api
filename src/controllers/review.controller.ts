@@ -120,7 +120,7 @@ class ReviewController {
     const options = getPaginationOptions(query);
     const match = getMatch(query);
     try {
-      const movie: IMovie | null = await Movie.findOne({ _id: params.movieId });
+      const movie: IMovie | null = await Movie.findOne({ title: params.movieTitle });
       if (!movie) {
         return res.status(404).send({ error: "Movie Not Found!" });
       }
@@ -173,7 +173,7 @@ class ReviewController {
     const options = getPaginationOptions(query);
     const match = getMatch(query);
     try {
-      const user: IUser | null = await User.findOne({ _id: params.userId });
+      const user: IUser | null = await User.findOne({ username: params.username });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }

@@ -17,7 +17,7 @@ router.post("/addFavorites", auth, reviewController.addFavorites);
 router.post("/removeFavorites", auth, reviewController.removeFavorites);
 router.get("/me/favoriteReviews", auth, reviewController.getFavoriteReviews);
 router.get("/me/createdReviews", auth, reviewController.getProfileReviews);
-router.get("/userReviews/:userId", auth, reviewController.getUserReviews);
-router.get("/movieReviews/:movieId", auth, reviewController.getMovieReviews);
+router.get("/userReviews/:username", auth, reviewController.getUserReviews);
+router.get("/movieReviews/:movieTitle", auth, reviewController.getMovieReviews);
 
 export default router;
