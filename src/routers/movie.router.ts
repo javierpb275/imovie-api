@@ -10,6 +10,4 @@ router.post("/", auth, movieController.createMovie);
 router.patch("/:id", auth, movieController.updateMovie);
 router.delete("/:id", auth, movieController.deleteMovie);
 
-//ANOTHER OPTION CAN BE CREATE A ROUTE THAT GETS THE MOVIE WITH ALL ITS REVIEWS
-
 export default router;
