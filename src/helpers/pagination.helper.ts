@@ -26,6 +26,8 @@ export const getMatch = (query: any): any => {
       } else {
         query[key] = false;
       }
+    } else if (query[key] === "null") {
+      query[key] = null;
     }
     return (match[key] = query[key]);
   });

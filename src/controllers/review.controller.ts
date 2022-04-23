@@ -21,7 +21,7 @@ class ReviewController {
       await newReview.save();
       return res.status(201).send(newReview);
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -37,12 +37,12 @@ class ReviewController {
         .skip(skip)
         .limit(limit)
         .populate([
-          { path: "user", select: "_id username email avatar", match, options },
+          { path: "user", select: "_id username followers avatar", match, options },
           { path: "movie", select: "_id title", match, options },
         ]);
       return res.status(200).send(allReviews);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -55,12 +55,12 @@ class ReviewController {
         return res.status(404).send({ error: "Review Not Found!" });
       }
       await review.populate([
-        { path: "user", select: "_id username email avatar" },
+        { path: "user", select: "_id username avatar" },
         { path: "movie", select: "_id title" },
       ]);
       return res.status(200).send(review);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -88,7 +88,7 @@ class ReviewController {
       }
       return res.status(200).send(updatedReview);
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -110,7 +110,7 @@ class ReviewController {
       await review.remove();
       return res.status(200).send(review);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -120,7 +120,9 @@ class ReviewController {
     const options = getPaginationOptions(query);
     const match = getMatch(query);
     try {
-      const movie: IMovie | null = await Movie.findOne({ title: params.movieTitle });
+      const movie: IMovie | null = await Movie.findOne({
+        title: params.movieTitle,
+      });
       if (!movie) {
         return res.status(404).send({ error: "Movie Not Found!" });
       }
@@ -129,13 +131,13 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username email avatar", match, options },
+          { path: "user", select: "_id username avatar", match, options },
           { path: "movie", select: "_id title", match, options },
-        ]
+        ],
       });
       return res.status(200).send(movie.reviews);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -157,13 +159,13 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username email avatar", match, options },
+          { path: "user", select: "_id username avatar", match, options },
           { path: "movie", select: "_id title", match, options },
-        ]
+        ],
       });
       return res.status(200).send(user.createdReviews);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -173,7 +175,9 @@ class ReviewController {
     const options = getPaginationOptions(query);
     const match = getMatch(query);
     try {
-      const user: IUser | null = await User.findOne({ username: params.username });
+      const user: IUser | null = await User.findOne({
+        username: params.username,
+      });
       if (!user) {
         return res.status(404).send({ error: "User Not Found!" });
       }
@@ -182,13 +186,13 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username email avatar", match, options },
+          { path: "user", select: "_id username avatar", match, options },
           { path: "movie", select: "_id title", match, options },
-        ]
+        ],
       });
       return res.status(200).send(user.createdReviews);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
 
@@ -213,7 +217,7 @@ class ReviewController {
       );
       return res.status(200).send({ message: "Added like successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -234,7 +238,7 @@ class ReviewController {
       );
       return res.status(200).send({ message: "Removed like successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -259,7 +263,7 @@ class ReviewController {
       );
       return res.status(200).send({ message: "Added dislike successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -280,7 +284,7 @@ class ReviewController {
       );
       return res.status(200).send({ message: "Removed dislike successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -301,7 +305,7 @@ class ReviewController {
       );
       return res.status(200).send({ message: "Added review successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -322,7 +326,7 @@ class ReviewController {
       );
       return res.status(200).send({ message: "Removed review successfully" });
     } catch (err) {
-      return res.status(400).send({error: err});
+      return res.status(400).send({ error: err });
     }
   }
 
@@ -344,15 +348,16 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username email avatar", match, options },
+          { path: "user", select: "_id username avatar", match, options },
           { path: "movie", select: "_id title", match, options },
-        ]
+        ],
       });
       return res.status(200).send(user.favoriteReviews);
     } catch (err) {
-      return res.status(500).send({error: err});
+      return res.status(500).send({ error: err });
     }
   }
+
 }
 
 const reviewController: ReviewController = new ReviewController();
