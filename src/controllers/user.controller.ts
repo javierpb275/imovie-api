@@ -33,12 +33,12 @@ class UserController {
       const accessToken: string = generateToken(
         payload.id,
         config.AUTH.ACCESS_TOKEN_SECRET,
-        "15m"
+        config.AUTH.ACCESS_TOKEN_EXPIRATION
       );
       const refreshToken: string = generateToken(
         payload.id,
         config.AUTH.REFRESH_TOKEN_SECRET,
-        "20m"
+        config.AUTH.REFRESH_TOKEN_EXPIRATION
       );
       refreshTokens.push(refreshToken);
       return res.status(200).send({
@@ -63,12 +63,12 @@ class UserController {
       const accessToken: string = generateToken(
         newUser._id.toString(),
         config.AUTH.ACCESS_TOKEN_SECRET,
-        "15m"
+        config.AUTH.ACCESS_TOKEN_EXPIRATION
       );
       const refreshToken: string = generateToken(
         newUser._id.toString(),
         config.AUTH.REFRESH_TOKEN_SECRET,
-        "20m"
+        config.AUTH.REFRESH_TOKEN_EXPIRATION
       );
       refreshTokens.push(refreshToken);
       await newUser.save();
@@ -106,12 +106,12 @@ class UserController {
       const accessToken: string = generateToken(
         foundUser._id.toString(),
         config.AUTH.ACCESS_TOKEN_SECRET,
-        "15m"
+        config.AUTH.ACCESS_TOKEN_EXPIRATION
       );
       const refreshToken: string = generateToken(
         foundUser._id.toString(),
         config.AUTH.REFRESH_TOKEN_SECRET,
-        "20m"
+        config.AUTH.REFRESH_TOKEN_EXPIRATION
       );
       refreshTokens.push(refreshToken);
       return res.status(200).send({
