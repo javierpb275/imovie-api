@@ -33,3 +33,17 @@ export const getMatch = (query: any): any => {
   });
   return match;
 };
+
+export const getFilteredMatch = (match: any, allowedProperties: string[]) => {
+  const filteredMatch: any = {};
+  const filteredKeys: string[] = Object.keys(match).filter((key) =>
+    allowedProperties.includes(key)
+  );
+  if (!filteredKeys.length) {
+    return filteredMatch;
+  }
+  filteredKeys.forEach((key) => {
+    filteredMatch[key] = match[key];
+  });
+  return filteredMatch;
+};

@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getMatch, getPaginationOptions } from "../helpers/pagination.helper";
+import {
+  getMatch,
+  getPaginationOptions,
+  getFilteredMatch,
+} from "../helpers/pagination.helper";
 import { validateObjectProperties } from "../helpers/validation.helper";
 import IMovie from "../interfaces/movie.interface";
 import IReview from "../interfaces/review.interface";
@@ -29,16 +33,21 @@ class ReviewController {
   public async getReviews(req: Request, res: Response): Promise<Response> {
     const { query } = req;
     const { limit, skip, sort } = getPaginationOptions(query);
-    const options = { limit, skip, sort };
     const match = getMatch(query);
+    const movieMatch = getFilteredMatch(match, ["title"]);
+    const userMatch = getFilteredMatch(match, ["username", "followers"]);
     try {
       const allReviews: IReview[] = await Review.find(match)
         .sort(sort)
         .skip(skip)
         .limit(limit)
         .populate([
-          { path: "user", select: "_id username followers avatar", match, options },
-          { path: "movie", select: "_id title", match, options },
+          {
+            path: "user",
+            select: "_id username followers avatar",
+            match: userMatch,
+          },
+          { path: "movie", select: "_id title", match: movieMatch },
         ]);
       return res.status(200).send(allReviews);
     } catch (err) {
@@ -119,6 +128,8 @@ class ReviewController {
     const { params, query } = req;
     const options = getPaginationOptions(query);
     const match = getMatch(query);
+    const movieMatch = getFilteredMatch(match, ["title"]);
+    const userMatch = getFilteredMatch(match, ["username"]);
     try {
       const movie: IMovie | null = await Movie.findOne({
         title: params.movieTitle,
@@ -131,8 +142,8 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username avatar", match, options },
-          { path: "movie", select: "_id title", match, options },
+          { path: "user", select: "_id username avatar", match: userMatch },
+          { path: "movie", select: "_id title", match: movieMatch },
         ],
       });
       return res.status(200).send(movie.reviews);
@@ -149,6 +160,8 @@ class ReviewController {
     const { userId, query } = req;
     const options = getPaginationOptions(query);
     const match = getMatch(query);
+    const movieMatch = getFilteredMatch(match, ["title"]);
+    const userMatch = getFilteredMatch(match, ["username"]);
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
@@ -159,8 +172,8 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username avatar", match, options },
-          { path: "movie", select: "_id title", match, options },
+          { path: "user", select: "_id username avatar", match: userMatch },
+          { path: "movie", select: "_id title", match: movieMatch },
         ],
       });
       return res.status(200).send(user.createdReviews);
@@ -174,6 +187,8 @@ class ReviewController {
     const { params, query } = req;
     const options = getPaginationOptions(query);
     const match = getMatch(query);
+    const movieMatch = getFilteredMatch(match, ["title"]);
+    const userMatch = getFilteredMatch(match, ["username"]);
     try {
       const user: IUser | null = await User.findOne({
         username: params.username,
@@ -186,8 +201,8 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username avatar", match, options },
-          { path: "movie", select: "_id title", match, options },
+          { path: "user", select: "_id username avatar", match: userMatch },
+          { path: "movie", select: "_id title", match: movieMatch },
         ],
       });
       return res.status(200).send(user.createdReviews);
@@ -338,6 +353,8 @@ class ReviewController {
     const { userId, query } = req;
     const options = getPaginationOptions(query);
     const match = getMatch(query);
+    const movieMatch = getFilteredMatch(match, ["title"]);
+    const userMatch = getFilteredMatch(match, ["username"]);
     try {
       const user: IUser | null = await User.findOne({ _id: userId });
       if (!user) {
@@ -348,8 +365,8 @@ class ReviewController {
         match,
         options,
         populate: [
-          { path: "user", select: "_id username avatar", match, options },
-          { path: "movie", select: "_id title", match, options },
+          { path: "user", select: "_id username avatar", match: userMatch },
+          { path: "movie", select: "_id title", match: movieMatch },
         ],
       });
       return res.status(200).send(user.favoriteReviews);
@@ -357,7 +374,6 @@ class ReviewController {
       return res.status(500).send({ error: err });
     }
   }
-
 }
 
 const reviewController: ReviewController = new ReviewController();
