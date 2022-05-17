@@ -18,6 +18,8 @@ interface IReview extends mongoose.Document {
   dislikes: IUser[];
   movie: IMovie;
   user: IUser;
+  title: string;
+  username: string;
 }
 
 export default IReview;

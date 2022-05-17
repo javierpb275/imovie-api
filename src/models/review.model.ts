@@ -24,6 +24,12 @@ const reviewSchema = new mongoose.Schema<IReview>(
       ref: "User",
       required: true,
     },
+    title: {
+      type: String
+    },
+    username: {
+      type: String
+    },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
