@@ -5,6 +5,7 @@ import helmet from "helmet";
 import userRouter from "./routers/user.router";
 import movieRouter from "./routers/movie.router";
 import reviewRouter from "./routers/review.router";
+import helloRouter from "./routers/hello.router";
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 //routes
+app.use("/api/hello", helloRouter);
 app.use("/api/users", userRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/reviews", reviewRouter);
