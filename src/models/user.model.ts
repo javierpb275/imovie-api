@@ -29,11 +29,13 @@ const userSchema = new mongoose.Schema<IUser>(
       trim: true,
       minLength: 8,
       validate(value: string) {
-        const strongRegex: RegExp = new RegExp(
-          "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})"
+        const mediumRegex: RegExp = new RegExp(
+          "^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})"
         );
-        if (!value.match(strongRegex)) {
-          throw new Error("Password is not secure");
+        if (!value.match(mediumRegex)) {
+          throw new Error(
+            "Passwords must have at least 6 characters, one lowercase letter, one uppercase letter and one number"
+          );
         }
       },
     },
