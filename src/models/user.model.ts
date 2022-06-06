@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
       required: true,
-      trim: true,
       validate(value: string) {
         const mediumRegex: RegExp = new RegExp(
           "^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})"
